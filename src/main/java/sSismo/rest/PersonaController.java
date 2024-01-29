@@ -74,32 +74,54 @@ public class PersonaController {
      * @return
      */
     @PostMapping("/personas/guardar")
-    public ResponseEntity guardar(@Valid @RequestBody PersonaWS personaWS) {
-        HashMap mapa = new HashMap<>();
+    public ResponseEntity<Object> guardar(@Valid @RequestBody PersonaWS personaWS) {
+        HashMap<String, Object> mapa = new HashMap<>();
+        
+        // Verificar si la identificación ya existe
+        Persona existingPersona = personaRepository.findByIdentificacion(personaWS.getIdentificacion());
+        if (existingPersona != null) {
+            mapa.put("evento", "La identificación ya está registrada");
+            return RespuestaLista.respuestaError(mapa, "ERROR");
+        }
+
+        // Verificar si el teléfono ya existe
+        existingPersona = personaRepository.findByTelefono(personaWS.getTelefono());
+        if (existingPersona != null) {
+            mapa.put("evento", "El teléfono ya está registrado");
+            return RespuestaLista.respuestaError(mapa, "ERROR");
+        }
+
+        // Verificar si el correo ya existe
+        Cuenta existingCuenta = cuentaRepository.findByCorreo(personaWS.getCuenta().getCorreo());
+        if (existingCuenta != null) {
+            mapa.put("evento", "El correo ya está registrado");
+            return RespuestaLista.respuestaError(mapa, "ERROR");
+        }
+
+        // Crear y guardar la persona
         Persona persona = personaWS.cargarObjeto(null);
         Rol rol = rolRepository.findByNombreRol(personaWS.getTipo_persona().toLowerCase());
         if (rol != null) {
             persona.setCreateAt(new Date());
             persona.setRol(rol);
+            
             if (personaWS.getCuenta() != null) {
                 if (personaWS.getTipo_persona().equalsIgnoreCase("cliente")) {
-                    mapa.put("evento", "Cliente no puede tener registrar una cuenta");
+                    mapa.put("evento", "Cliente no puede registrar una cuenta");
                     return RespuestaLista.respuestaError(mapa, "ERROR");
                 }
                 Cuenta cuenta = personaWS.getCuenta().cargarObjeto(null);
-                // estado Cuenta
                 cuenta.setCreateAt(new Date());
                 cuenta.setPersona(persona);
-                persona.setCuenta(cuenta);
                 cuenta.setClave(Utilidades.clave(personaWS.getCuenta().getClave()));
-
+                persona.setCuenta(cuenta);
             }
             personaRepository.save(persona);
             mapa.put("evento", "Se ha registrado correctamente");
             return RespuestaLista.respuesta(mapa, "OK");
         } else {
             mapa.put("evento", "Objeto no encontrado");
-            return RespuestaLista.respuesta(mapa, "No se encontro el tipo de persona");
+            return RespuestaLista.respuesta(mapa, "No se encontró el tipo de persona");
         }
     }
 
@@ -148,6 +170,9 @@ public class PersonaController {
             aux.put("Identificacion", p.getIdentificacion());
             aux.put("Telefono", p.getTelefono());
             aux.put("Cuenta_external", p.getCuenta().getId());
+            aux.put("External", p.getExternal_id());
+            aux.put("Correo", p.getCuenta().getCorreo());
+            aux.put("Clave", p.getCuenta().getClave());
             return RespuestaLista.respuestaLista(aux);
 
         } else {

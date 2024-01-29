@@ -23,5 +23,13 @@ public interface PersonaRepository extends CrudRepository<Persona, Integer>{
      */
     @Query("SELECT l from persona l WHERE l.identificacion = ?1")
     Persona findByIdentificacion(String identificacion);
+    /**
+     * 
+     * @param telefono
+     * Este método se utiliza para buscar en la base de datos los registros que coincidan con el teléfono especificado
+     * @return
+     */
+    @Query("SELECT l FROM persona l WHERE l.telefono = ?1")
+    Persona findByTelefono(String telefono);
 
 }
