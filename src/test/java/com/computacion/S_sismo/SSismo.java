@@ -1,10 +1,10 @@
-package com.computacion.gestion_tutorias;
+package com.computacion.S_sismo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GestionTutoriasApplicationTests {
+class SSismo {
 
 	@Test
 	void contextLoads() {

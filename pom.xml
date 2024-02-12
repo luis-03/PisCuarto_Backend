@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.computacion</groupId>
-	<artifactId>gestion_tutorias</artifactId>
+	<artifactId>Ssismo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>gestion_tutorias</name>
 	<description>Sistema de gestion de tutorias</description>
