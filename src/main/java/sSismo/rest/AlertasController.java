@@ -1,8 +1,6 @@
 package sSismo.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +22,11 @@ public class AlertasController {
     private GeneradorAlertas generadorAlertas;
 
     @GetMapping("/alertas")
-    public ResponseEntity<AlertaResponse> obtenerAlertaSismo() {
+    public AlertaResponse obtenerAlertaSismo() {
         double intensidadSismo = sismoService.obtenerIntensidadSismo();
+        String fecha = sismoService.obtenerFecha();
+        String hora = sismoService.obtenerHora();
         String alerta = generadorAlertas.generarAlerta(intensidadSismo);
-        
-        AlertaResponse response = new AlertaResponse(intensidadSismo, alerta);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new AlertaResponse(intensidadSismo, fecha, hora, alerta);
     }
 }

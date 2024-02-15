@@ -11,8 +11,8 @@
 	<groupId>com.computacion</groupId>
 	<artifactId>Ssismo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>gestion_tutorias</name>
-	<description>Sistema de gestion de tutorias</description>
+	<name>sistea-sismo</name>
+	<description>Sistema de rutas ante un sismo</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
